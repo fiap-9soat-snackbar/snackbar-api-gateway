@@ -1,0 +1,96 @@
+example:
+
+api
+- body
+- cors
+- name
+- description
+
+authorizers
+- authorizer type
+- identity source
+- name
+- jwt configuration
+
+domain
+- name
+- records
+- certificate
+- mtls
+
+routes
+- method + route (route key)
+- authorization type
+- authorizer_id / authorizer key
+- authorization scopes
+- throttling
+- metrics
+- integration
+    - uri
+    - payload format version 
+
+stage
+- cw access log
+- default route settings
+
+------------------------
+doc
+
+none required
+
+------------------------
+
+from tf original
+
+--api--
+
+name
+protocol type
+
+--authorizers--
+
+api_id
+authorizer_type
+name
+
+authorizer_uri (for request lambda only)
+identity sources (the request header)
+name
+authorizer paylod format version
+
+--domain name--
+
+domain name
+domain name configuration
+- certificate arn (from acm)
+- endpoint type
+- security policy
+
+route53 record (optional)
+
+--routes--
+
+api_id
+route_key
+
+target (integration)
+
+--stage--
+
+api_id
+name
+
+--integration--
+
+api_id
+integration_type (AWS_PROXY, HTTP_PROXY)
+
+integration_method (HTTP method)
+integration_uri (URI of Lambda if AWS_Proxy, URL FQDN ; if private HTTP, ALB/NLB listener ARN)
+connection_type (Internet or VPC Link)
+
+--vpc link--
+
+name
+security group ids
+subnet ids
