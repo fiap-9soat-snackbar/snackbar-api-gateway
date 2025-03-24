@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "snackbar_api" {
-  name          = "${var.local_name}-api"
+  name          = "${data.terraform_remote_state.global.outputs.project_name}-api"
   description   = "Snackbar HTTP API Gateway"
   protocol_type = "HTTP"
 }
@@ -10,7 +10,9 @@ resource "aws_apigatewayv2_authorizer" "jwt_auth" {
   authorizer_type  = "REQUEST"
   identity_sources = ["$request.header.Authorization"]
 
-  authorizer_uri = var.lambda_authorizer_invoke_arn
+  #authorizer_uri = var.lambda_authorizer_invoke_arn
+
+  authorizer_uri = data.terraform_remote_state.lambda.outputs.lambda_authorizer_invoke_arn
 
   authorizer_payload_format_version = "2.0"
   enable_simple_responses           = true
@@ -73,6 +75,14 @@ resource "aws_apigatewayv2_route" "api_route_get_products" {
   authorization_type = "CUSTOM"
   authorizer_id = aws_apigatewayv2_authorizer.jwt_auth.id
 }
+
+resource "aws_lambda_permission" "api_gateway_lambda" {
+  action        = "lambda:InvokeFunction"
+  function_name = data.terraform_remote_state.lambda.outputs.aws_lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.snackbar_api.execution_arn}/*/*"
+}
+
 
 /*
 module "api_gateway" {
