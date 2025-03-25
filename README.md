@@ -11,7 +11,7 @@ This Terraform configuration provisions an **AWS API Gateway (HTTP API)** integr
 - **HTTP API Gateway**: Lightweight, fast, and cost-effective API Gateway for HTTP-based integrations.
 - **Lambda JWT Authorizer**: Custom authorizer to validate JWT tokens for protected routes.
 - **Public & Protected Routes**:
-  - Public routes (`/health`, `/login`) with no authentication.
+  - Public routes (`/health`, `/signup`, `/login`) with no authentication.
   - Protected route (`/products`) requiring a valid JWT token.
 - **ALB Integration**: Routes requests to backend services via an ALB.
 - **CloudWatch Logging**: Access logs for API Gateway requests.
@@ -54,7 +54,6 @@ The architecture follows this flow for incoming requests:
 1. **AWS CLI Configured** with valid credentials.  
 2. **Terraform v1.0+** installed.  
 3. **Variables Prepared**:
-   - `local_name` (e.g., `snackbar`).
    - `alb_dns_name` (ALB DNS name from your infrastructure).
    - `lambda_authorizer_invoke_arn` (ARN of your Lambda Authorizer function).
 
